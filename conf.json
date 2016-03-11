@@ -1,0 +1,50 @@
+{
+    "paths": {
+        "base": "./src/",
+        "js": "./src/js/",
+        "vendorjs": "./src/js/vendor/",
+        "ts": "./src/js/ts/",
+        "jade": "./src/jade/",
+        "jdinc": "./src/jade/inc/",
+        "sass": "./src/css/sass/",
+        "css": "./src/css/",
+        "tsdefs": "./src/js/ts/defs/",
+        "assets": "./src/assets/",
+        "img": "./src/img/"
+    },
+    "files": {
+        "html":"./src/*.html",
+        "config":"./src/config.xml",    //cordova config.xml file
+        "js": "./src/js/*.js",
+        "vendorjs": "./src/js/vendor/*.js",
+        "ts": "./src/js/ts/*.ts",
+        "tsMain" : "./src/js/ts/app.ts",
+        "tsOut" : "app.js",
+        "jade": "./src/jade/*.jade",
+        "jdinc": "./src/jade/inc/*.jade",
+        "sass": "./src/css/sass/*.*",
+        "css": "./src/css/*.css",
+        "assets": "./src/assets/**/*",
+        "typings": "./typings/**/*.d.ts",
+        "img": "./src/img/*.png"
+
+    },
+    "dist":{
+        "base":"./dist/",
+        "css":"./dist/css/",
+        "js":"./dist/js/",
+        "assets":"./dist/assets/",
+        "html":"./dist/",
+        "all":"./dist/**/*"
+    },
+    "cd":{
+        "all":"./cordova-project/www/**/*",
+        "html":"./cordova-project/www/",
+        "config":"./cordova-project/",
+        "js":"./cordova-project/www/js/",
+        "css":"./cordova-project/www/css/",
+        "assets":"./cordova-project/www/assets/",
+        "img":"./cordova-project/www/img/"
+    }
+
+}
