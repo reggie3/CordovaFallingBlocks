@@ -5,6 +5,6 @@
     "sourceMap": true
   },
   "files": [
-    "./src/js/ts/app.ts"
+    "./src/js/ts/index.ts"
   ]
 }

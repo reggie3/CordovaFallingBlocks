@@ -14,45 +14,64 @@ var sass = require('gulp-sass');
 var jade = require('gulp-jade');
 const del = require("del");
 const zip = require('gulp-zip');
+var runSequence = require('run-sequence');
+const concat = require('gulp-concat');
 
 //custom config file
 const conf = require("./conf.json");
 const webpackConfig = require("./webpack.config.js");
 
 
+
 /************************************
  * build the cordva project
  */
-gulp.task('cd', ()=>{
-    // del(conf.cd.all);
-    // copy index.html
-    gulp.src(conf.files.html).pipe(print()).pipe(gulp.dest(conf.cd.html));
-    // gulp.src(conf.files.config).pipe(print()).pipe(gulp.dest(conf.cd.html));
-    gulp.src(conf.files.assets).pipe(gulp.dest(conf.cd.assets));
-    gulp.src(conf.files.js).pipe(gulp.dest(conf.cd.js));
-    gulp.src(conf.files.css).pipe(gulp.dest(conf.cd.css));
-    gulp.src(conf.files.img).pipe(gulp.dest(conf.cd.img));
-});
 
+gulp.task('cleancdv', function(callback){
+    del(conf.cd.all);
+    callback();
+})
+gulp.task('copycdv',  function(callback){
+    // copy necessary files from dist to cordova-project/www
+    gulp.src(conf.distf.html).pipe(print()).pipe(gulp.dest(conf.cd.base));
+    gulp.src(conf.distf.assets).pipe(print()).pipe(gulp.dest(conf.cd.assets));
+    gulp.src(conf.distf.js).pipe(print()).pipe(gulp.dest(conf.cd.js));
+    gulp.src(conf.distf.css).pipe(print()).pipe(gulp.dest(conf.cd.css));
+    gulp.src(conf.distf.img).pipe(print()).pipe(print()).pipe(gulp.dest(conf.cd.img));
+    // gulp.src(conf.distf.cordova).pipe(print()).pipe(gulp.dest(conf.cd.base));
+    callback();
+})
+
+gulp.task('cdv', gulp.series('cleancdv', 'copycdv'));
 /*************************
  * create a zip of the dist for cocoon.io upload
  */
-
 gulp.task('zip', () => {
 	return gulp.src(conf.dist.all)
 		.pipe(zip('archive.zip'))
 		.pipe(gulp.dest('./'));
 });
+
 /************************
  * build distribution
  */
-gulp.task('dist', function(){
-    del(conf.dist.all);
-    gulp.src(conf.files.html).pipe(print()).pipe(gulp.dest(conf.dist.html));
-    gulp.src(conf.files.assets).pipe(gulp.dest(conf.dist.assets));
-    gulp.src(conf.files.js).pipe(gulp.dest(conf.dist.js));
-    gulp.src(conf.files.css).pipe(gulp.dest(conf.dist.css));
+
+gulp.task('cleandist', function(callback){
+     del(conf.dist.all);
+     callback();
 });
+
+gulp.task('copydist', function(callback){
+    gulp.src(conf.files.html).pipe(print()).pipe(gulp.dest(conf.dist.html));
+    gulp.src(conf.files.assets).pipe(print()).pipe(gulp.dest(conf.dist.assets));
+    gulp.src(conf.files.js).pipe(print()).pipe(gulp.dest(conf.dist.js));
+    gulp.src(conf.files.css).pipe(print()).pipe(gulp.dest(conf.dist.css));
+    gulp.src(conf.files.img).pipe(print()).pipe(gulp.dest(conf.dist.img));
+    // gulp.src(conf.files.cordova).pipe(print()).pipe(gulp.dest(conf.dist.base));
+    callback();
+});
+
+gulp.task('dist', gulp.series('cleandist', 'copydist'));
 
 /*************************************
  * copy the ts def files that are in the typings to the ts source folder so that
@@ -62,6 +81,10 @@ gulp.task('tsdef', function(){
     gulp.src(conf.files.typings).pipe(print()).pipe(gulp.dest(conf.paths.tsdefs));
 });
 
+/***************************************
+ * clean the distribution and cordova directories
+ */
+gulp.task('clean', gulp.series('cleandist', 'cleancdv'));
 
 /**********************************
  * run Webpack task defined in webpack.config.js
@@ -92,12 +115,22 @@ function onBuild(done){
     }
 }
 
+/**************************
+ * go from wp of project to creating cordova project
+ */
+gulp.task('wpcdv', gulp.series('wp', 'cleandist', 'dist', 'cleancdv', 'cdv'));
+
+
+/********************************************************
+ * gulp watch task
+ */
 gulp.task('watch', function(){
     gulp.watch([conf.files.ts], ['wp']);
     gulp.watch([conf.files.jade, conf.files.jdinc], ['jade']);
     gulp.watch([conf.files.sass], ['sass']);
     gulp.watch([conf.files.typings], ['tsdef']);
 });
+
 
 /*************************************************
  * compile the jade files into html files
@@ -118,6 +151,16 @@ gulp.task('jade', function (callback) {
         .pipe(gulp.dest(conf.paths.base));
 
     return stream;
+});
+
+/*********************************************************
+ * concat the shader file to the index.html file
+ */
+gulp.task('shader', ()=>{
+    return gulp.src([conf.files.html, conf.files.shaders])
+        .pipe(print())
+        .pipe(concat('index.html'))
+        .pipe(gulp.dest(conf.paths.base));
 });
 
 /********************************************
@@ -174,6 +217,14 @@ gulp.task('condist', function () {
     });
 });
 
+//open cordova files in server
+gulp.task('concd', function () {
+    connect.server({
+        root: 'cordova-project/www',
+        port: 8003,
+        livereload: true
+    });
+});
 
 
 //Erro funciton that emits a beep sound and logs an error

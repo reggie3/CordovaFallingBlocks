@@ -17,7 +17,7 @@ export class Game {
         // init renderer
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setSize(width, height);
-        document.body.appendChild(this.renderer.domElement);
+        document.getElementById("wrapper").appendChild(this.renderer.domElement);
 
 
         // console.log("new world created.");

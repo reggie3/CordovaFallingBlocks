@@ -9,6 +9,7 @@ import StaticItem = require("./staticItem");
 import Controls = require("./controls");
 import * as Hammer from "hammerjs";
 import Utils = require("./utils");
+import SimpleShader = require("./simpleShader");
 
 export class PlayScreen extends GameScreen.Screen {
     controls = { leftButton: null, downButton: null, rightButton: null };
@@ -21,6 +22,12 @@ export class PlayScreen extends GameScreen.Screen {
         this.blockWidth = options.blockWidth;
 
         let groundY = - 10 * this.blockWidth;
+        // get the shaders for the ground
+        let shaderProp = {
+            vertexShader: SimpleShader.SimpleShader.groundVertexShader,
+            fragmentShader: SimpleShader.SimpleShader.groundFragmentShader
+        };
+
         // create the ground
         let ground = new StaticItem.StaticItem({
             width: this.blockWidth * 11,
@@ -29,7 +36,7 @@ export class PlayScreen extends GameScreen.Screen {
             x: 0,
             y: groundY,
             z: 0,
-            color: new THREE.Color("rgb(0,140,0)"),
+            mat: new THREE.ShaderMaterial(shaderProp),
             name: "ground",
             screen : this
         });
@@ -86,7 +93,8 @@ export class PlayScreen extends GameScreen.Screen {
     hammerEventReceived(event) {
         // only acknowledge events if this screen is the current game screen
 
-            let touched = Utils.Utils.hammerEventReceived(event, this.camera, this.scene.children);
+            let touched = Utils.Utils.hammerEventReceived(event, this.camera, this.scene.children,
+                GameScreen.Screen.width, GameScreen.Screen.height);
 
 
             if ((touched) && (touched.length > 0)) {
@@ -96,19 +104,19 @@ export class PlayScreen extends GameScreen.Screen {
                     FallingItem.FallingItem.addMove("left");
                     Controls.Controls.pushButton(this.controls.leftButton, false);
                     return true;
-                    break;
+
                 case "rightButton":
                     // console.log("right");
                     FallingItem.FallingItem.addMove("right");
                     Controls.Controls.pushButton(this.controls.rightButton, false);
                     return true;
-                    break;
+
                 case "downButton":
                     // console.log("down");
                     FallingItem.FallingItem.fallFaster = !FallingItem.FallingItem.fallFaster;
                     Controls.Controls.pushButton(this.controls.downButton, false);
                     return true;
-                    break;
+
                 }
             }
 

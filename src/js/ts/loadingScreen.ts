@@ -1,13 +1,8 @@
-
-
-
 import * as THREE from "three";
 import GameScreen = require("./gameScreen");
 import AssetManager = require("./assetManager");
 import Utils = require("./utils");
 import Controls = require("./controls");
-import App = require("./app");
-
 
 export class LoadingScreen extends GameScreen.Screen {
     static curProgressCounter = 0;
@@ -144,6 +139,8 @@ export class LoadingScreen extends GameScreen.Screen {
                 console.log("loading complete");
                 AssetManager.AssetManager.allAssetsLoaded = true;
                 this.showGameStart();
+                alert("show game start");
+                console.log("show game start");
                 break;
         }
         // need to use a this.TWEEN to point to the TWEEN object that is referenced in the superclass
@@ -204,7 +201,8 @@ export class LoadingScreen extends GameScreen.Screen {
 
     hammerEventReceived(event) {
         // only acknowledge events if this screen is the current game screen
-            let touched = Utils.Utils.hammerEventReceived(event, this.camera, this.touchableMeshes);
+            let touched = Utils.Utils.hammerEventReceived(event, this.camera,
+                this.touchableMeshes, GameScreen.Screen.width, GameScreen.Screen.height);
 
             if (touched.length > 0) {
                 switch (touched[0].object.userData.id) {
@@ -213,7 +211,6 @@ export class LoadingScreen extends GameScreen.Screen {
                         Controls.Controls.pushButton(this.startButton, true);
                         GameScreen.Screen.setCurrentcreen(this.nextScreen);
                         return true;
-                        break;
                 }
             }
 

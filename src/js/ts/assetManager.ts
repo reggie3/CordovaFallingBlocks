@@ -8,13 +8,13 @@ import * as Howl from "howler";
 
 export class AssetManager {
 
-    static imgPath = "./../assets/graphics/";
-    static soundPath = "./../assets/sounds/";
-    static threeFontPath = "./../assets/threeTypefaces/";
+    static imgPath = "./myassets/graphics/";
+    static soundPath = "./myassets/sounds/";
+    static threeFontPath = "./myassets/threeTypefaces/";
     static assets = {
-        leftButton: {type: "texture", source: "./../assets/graphics/buttonLeft.png", tag: "buttonLeft"},
-        downButton: {type: "texture", source: "./../assets/graphics/buttonDown.png", tag: "buttonDown"},
-        rightButton: {type: "texture", source: "./../assets/graphics/buttonRight.png", tag: "buttonRight"},
+        leftButton: {type: "texture", source: AssetManager.imgPath + "buttonLeft.png", tag: "buttonLeft"},
+        downButton: {type: "texture", source: AssetManager.imgPath + "buttonDown.png", tag: "buttonDown"},
+        rightButton: {type: "texture", source: AssetManager.imgPath + "buttonRight.png", tag: "buttonRight"},
         btnRed: {type: "texture", source: AssetManager.imgPath + "btnRed.png", tag: "btnRed", material: null},
         btnCyan: {type: "texture", source: AssetManager.imgPath + "btnCyan.png", tag: "btnCyan", material: null},
         btnPurple: {type: "texture", source: AssetManager.imgPath + "btnPurple.png", tag: "btnPurple", material: null},
@@ -24,7 +24,7 @@ export class AssetManager {
         helvetiker_regular: {type: "threeFont", source: AssetManager.threeFontPath + "helvetiker_regular" + ".typeface.js", font: null},
         optimer_bold: {type: "threeFont", source: AssetManager.threeFontPath + "optimer_bold" + ".typeface.js", font: null},
         optimer_regular: {type: "threeFont", source: AssetManager.threeFontPath + "optimer_regular" + ".typeface.js", font: null},
-        blueProgressBar: {type: "texture", source: AssetManager.imgPath + "blueBar.jpg", material: null},
+        blueProgressBar: {type: "texture", source: AssetManager.imgPath + "bluebar.jpg", material: null},
         bkgLoading: {type: "texture", source: AssetManager.imgPath + "bkgLoadingScreen.jpg", material: null},
         switch: {type: "sound", source: AssetManager.soundPath + "218115__mastersdisaster__switch-on-livingroom.wav", soundSprite: null},
         click: {type: "sound", source: AssetManager.soundPath + "Click2-Sebastian-759472264.mp3", soundSprite: null},
@@ -39,16 +39,21 @@ export class AssetManager {
     static onProgress;
     static onComplete;
     static allAssetsLoaded = false;
+    static context;     // this is the context that this function is called from, it will act like "this" in the callback functions
 
     constructor() {
 
     }
 
-    static loadAssets(onInit, onProgress, onComplete) {
+    static loadAssets(context, onInit, onProgress, onComplete) {
         AssetManager.onProgress = onProgress;
         AssetManager.onComplete = onComplete;
+
+        // set the context to be used by the callback function
+        AssetManager.context = context;
+
         // send the total number of items that need to be loaded
-        onInit(Object.keys(AssetManager.assets).length);
+        onInit(context, Object.keys(AssetManager.assets).length);
 
         _.forEach(AssetManager.assets, function(asset, key){
             switch (asset.type) {
@@ -68,8 +73,8 @@ export class AssetManager {
             AssetManager.numAssetsToLoad ++;
         });
         // {
-        //     if (AssetManager.assets.hasOwnProperty(asset)) {
-        //         console.log(AssetManager.assets.source)
+        //     if (AssetManager.myassets.hasOwnProperty(asset)) {
+        //         console.log(AssetManager.myassets.source)
         //     }
         // }
         return {};
@@ -108,10 +113,10 @@ export class AssetManager {
 
     static assetLoaded() {
         AssetManager.numAssetsLoaded ++;
-                AssetManager.onProgress();
+                AssetManager.onProgress(AssetManager.context);
 
                 if (AssetManager.numAssetsLoaded ===  AssetManager.numAssetsToLoad) {
-                    AssetManager.onComplete();
+                    AssetManager.onComplete(AssetManager.context);
                 }
     }
     static getAssetByTag(tag: string) {

@@ -3,10 +3,10 @@ var path = require("path");
 
 module.exports = {
     entry: [
-        './src/js/ts/app.ts'
+        './src/js/ts/index.ts'
     ],
     output: {
-        filename: './src/js/bundle.js',
+        filename: './src/js/index.js',
         //path: path.join(__dirname, "dist"),
         //publicPath: "./src/",
 

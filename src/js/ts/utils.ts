@@ -6,7 +6,12 @@ import AssetManager = require("./assetManager");
 
 
 export class Utils {
-    static hammerEventReceived(event, camera, intersectees) {
+    static screenWidth;
+    static screenHeight;
+
+    static hammerEventReceived(event, camera, intersectees, width, height) {
+        Utils.screenWidth = width;
+        Utils.screenHeight = height;
         // output the type of event it was
         // console.log(event.srcEvent + " received");
         let tapPoint = new THREE.Vector2();
@@ -17,10 +22,10 @@ export class Utils {
                 tapPoint.y = event.center.y;
                 break;
         }
-        // console.log("touchpoint " + tapPoint.x + ", " + tapPoint.y);
+        console.log("touchpoint " + tapPoint.x + ", " + tapPoint.y);
         let worldCoords = Utils.convertCoordsToThreescreen
             (new THREE.Vector2(tapPoint.x, tapPoint.y));
-        // console.log("world Coords: " + worldCoords.x + ", " + worldCoords.y);
+        console.log("world Coords: " + worldCoords.x + ", " + worldCoords.y);
 
         let raycaster = new THREE.Raycaster(); // create once
         // raycasting code from each camera copied from here:
@@ -40,6 +45,9 @@ export class Utils {
         let intersectionArray = raycaster.intersectObjects(intersectees);
         if (intersectionArray.length > 0) {
             return intersectionArray;
+        }
+        else {
+            return [];
         }
 
     }

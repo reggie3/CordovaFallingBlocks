@@ -32,7 +32,7 @@ export class StaticItem extends ThreeItem.ThreeItem {
         this.geometry = new THREE.BoxGeometry(this.dim.width, this.dim.height, this.dim.depth);
 
 
-        this.material = new THREE.MeshBasicMaterial({
+        this.material = options && options.mat || new THREE.MeshBasicMaterial({
              color: (options && options.color) ? options.color : new THREE.Color("rgb(255, 0, 0)")
             //  specular: 0x009900, shininess: 30, shading: THREE.FlatShading
         });

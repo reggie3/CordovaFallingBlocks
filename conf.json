@@ -9,12 +9,13 @@
         "sass": "./src/css/sass/",
         "css": "./src/css/",
         "tsdefs": "./src/js/ts/defs/",
-        "assets": "./src/assets/",
-        "img": "./src/img/"
+        "assets": "./src/myassets/",
+        "img": "./src/img/",
+        "shaders": "./src/shaders/"
     },
     "files": {
         "html":"./src/*.html",
-        "config":"./src/config.xml",    //cordova config.xml file
+        "config":"./src/config.xml",
         "js": "./src/js/*.js",
         "vendorjs": "./src/js/vendor/*.js",
         "ts": "./src/js/ts/*.ts",
@@ -24,26 +25,37 @@
         "jdinc": "./src/jade/inc/*.jade",
         "sass": "./src/css/sass/*.*",
         "css": "./src/css/*.css",
-        "assets": "./src/assets/**/*",
+        "assets": "./src/myassets/**/*",
         "typings": "./typings/**/*.d.ts",
-        "img": "./src/img/*.png"
-
+        "img": "./src/img/*",
+        "shaders": "./src/shaders/*",
+        "cordova": "./src/cordova.js"
     },
     "dist":{
         "base":"./dist/",
         "css":"./dist/css/",
         "js":"./dist/js/",
-        "assets":"./dist/assets/",
+        "assets":"./dist/myassets/",
         "html":"./dist/",
+        "img":"./dist/img/",
         "all":"./dist/**/*"
+    },
+    "distf":{
+        "css":"./dist/css/*.css",
+        "js":"./dist/js/*.js",
+        "assets":"./dist/myassets/**/*",
+        "html":"./dist/*.html",
+        "img":"./dist/img/*",
+        "all":"./dist/**/*",
+        "cordova":"./dist/cordova.js"
     },
     "cd":{
         "all":"./cordova-project/www/**/*",
-        "html":"./cordova-project/www/",
+        "base":"./cordova-project/www/",
         "config":"./cordova-project/",
         "js":"./cordova-project/www/js/",
         "css":"./cordova-project/www/css/",
-        "assets":"./cordova-project/www/assets/",
+        "assets":"./cordova-project/www/myassets/",
         "img":"./cordova-project/www/img/"
     }
 

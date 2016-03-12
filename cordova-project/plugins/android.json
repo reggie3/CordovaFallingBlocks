@@ -7,13 +7,13 @@
         "files": {}
     },
     "installed_plugins": {
-        "cordova-plugin-whitelist": {
+        "cordova-plugin-console": {
             "PACKAGE_NAME": "com.reggie3.cordovaFallingBlocks"
         },
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.reggie3.cordovaFallingBlocks"
         },
-        "cordova-plugin-console": {
+        "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.reggie3.cordovaFallingBlocks"
         }
     },
